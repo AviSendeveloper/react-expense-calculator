@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Form from "./components/form";
 import Table from "./components/DataShow/table";
+import NoDataFound from "./components/DataShow/NoDataFound";
 import Header from "./components/header";
 import logo from "./assets/investment-calculator-logo.png";
 import "./index.css";
@@ -14,22 +15,22 @@ const App = () => {
         const yearlyContribution = formData.yearlyContribution;
         const expectedReturn = formData.expectedReturn / 100;
         const duration = formData.duration;
-    
-        let totalInterest = 0
+
+        let totalInterest = 0;
         for (let i = 0; i < duration; i++) {
             const yearlyInterest = currentSaving * expectedReturn;
             totalInterest += yearlyInterest;
             currentSaving += yearlyInterest + yearlyContribution;
-            
+
             yearlyData.push({
                 year: i + 1,
                 currentSaving: currentSaving,
                 yearlyInterest: yearlyInterest,
                 totalInterest: totalInterest,
-                yearlyContribution: yearlyContribution
+                yearlyContribution: yearlyContribution,
             });
         }
-        console.log('yearlyData: ', yearlyData);
+        console.log("yearlyData: ", yearlyData);
 
         setResultData(yearlyData);
     };
@@ -40,8 +41,10 @@ const App = () => {
 
             <Form onClickCalculation={calculationHandler} />
 
-            {resultData === null && "No Data found"}
-            {(resultData !== null && resultData.length > 0) && <Table data={resultData}/>}
+            {resultData === null && <NoDataFound />}
+            {resultData !== null && resultData.length > 0 && (
+                <Table data={resultData} />
+            )}
         </div>
     );
 };
